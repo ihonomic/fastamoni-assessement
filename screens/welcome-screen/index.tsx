@@ -15,7 +15,7 @@ const WelcomeScreen = () => {
         <View style={styles.centralized}>
           {/* <SquareMeLogoWhiteWelcome /> */}
           <Text style={{ color: COLORS.white, fontSize: 19 }}>
-            fastaMoni technologies
+            FASTAMONI Technologies
           </Text>
         </View>
         <View style={styles.centralized_bottom}>
