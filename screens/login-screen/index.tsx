@@ -8,9 +8,18 @@ import { StackNavigation } from "../../types";
 import { GiftIcon } from "../../assets/svgs/icons";
 import { Dropdown } from "react-native-element-dropdown";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { userSelector } from "../../store/userSlice";
 
-const SignUpScreen = () => {
+const LoginScreen = () => {
   const navigation = useNavigation<StackNavigation>();
+
+  // GLOBAL STATE
+  const dispatch = useDispatch();
+  const {
+    isAuthenticated,
+    userInfo: { id, email },
+  } = useSelector(userSelector);
 
   return (
     <View style={styles.container}>
@@ -45,18 +54,18 @@ const SignUpScreen = () => {
           onPress={() => navigation.navigate("verifyPhone")}
         />
         <Text
-          onPress={() => navigation.navigate("login")}
+          onPress={() => navigation.navigate("signup")}
           style={{ textAlign: "center", color: COLORS.darkGray }}
         >
-          Already have an account?{" "}
-          <Text style={{ color: COLORS.secondary }}>Login here</Text>
+          Not registered?{" "}
+          <Text style={{ color: COLORS.secondary }}>Signup here</Text>
         </Text>
       </View>
     </View>
   );
 };
 
-export default SignUpScreen;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {

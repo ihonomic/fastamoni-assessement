@@ -25,7 +25,7 @@ const WelcomeScreen = () => {
           />
           <SecondaryButton
             title="I have an account"
-            onPress={() => navigation.navigate("signup")}
+            onPress={() => navigation.navigate("login")}
           />
         </View>
       </SafeAreaView>
