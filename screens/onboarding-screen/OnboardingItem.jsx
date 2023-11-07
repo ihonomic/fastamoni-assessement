@@ -1,6 +1,7 @@
 import {
     StyleSheet, Text, View,
-    useWindowDimensions, ImageBackground, Platform, TouchableOpacity
+    useWindowDimensions, ImageBackground, Platform, TouchableOpacity,
+    StatusBar
 } from 'react-native'
 import React from 'react'
 import { COLORS, SIZES, TYPOGRAPHY } from '../../theme'
@@ -18,7 +19,7 @@ const OnboardingItem = ({ item }) => {
             style={[styles.container, { width: '100%', height: '100%' }]}
         >
             <View style={styles.logo}>
-                {item.logo}
+                {/* {item.logo} */}
             </View>
 
             <View style={[styles.container, { width }]}>

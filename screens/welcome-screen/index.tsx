@@ -13,7 +13,10 @@ const WelcomeScreen = () => {
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.centralized}>
-          <SquareMeLogoWhiteWelcome />
+          {/* <SquareMeLogoWhiteWelcome /> */}
+          <Text style={{ color: COLORS.white, fontSize: 19 }}>
+            fastaMoni technologies
+          </Text>
         </View>
         <View style={styles.centralized_bottom}>
           <PrimaryButton
