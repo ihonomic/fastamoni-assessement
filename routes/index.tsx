@@ -9,6 +9,7 @@ import {
   SecurityPinScreen,
   SignUpScreen,
   VerifyPhoneScreen,
+  LoginScreen,
 } from "../screens";
 import { COLORS } from "../theme";
 import { GoBackIcon } from "../assets/svgs/icons";
@@ -59,7 +60,14 @@ const index = () => {
         name="signup"
         component={SignUpScreen}
         options={{
-          title: "Enter Your Phone Number",
+          title: "Sign up as a member",
+        }}
+      />
+      <Stack.Screen
+        name="login"
+        component={LoginScreen}
+        options={{
+          title: "Sign into your account",
         }}
       />
       <Stack.Screen

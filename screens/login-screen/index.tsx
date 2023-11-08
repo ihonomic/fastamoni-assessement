@@ -7,10 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types";
 import { GiftIcon } from "../../assets/svgs/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { clearState, signUpUser, userSelector } from "../../store/userSlice";
+import { clearState, loginUser, userSelector } from "../../store/userSlice";
 import Loader from "../../components/Loader";
 
-const SignUpScreen = () => {
+const LoginScreen = () => {
   const navigation = useNavigation<StackNavigation>();
 
   // GLOBAL STATE
@@ -52,7 +52,7 @@ const SignUpScreen = () => {
     }
     setLoading(true);
     console.log(formData);
-    dispatch(signUpUser(formData));
+    dispatch(loginUser(formData));
   };
 
   //  CLEAR REDUX DATA ON EVERY APP REFRESH
@@ -106,18 +106,18 @@ const SignUpScreen = () => {
       <View style={styles.actionBtn}>
         <DefaultButton title="Proceed" onPress={onSubmit} />
         <Text
-          onPress={() => navigation.navigate("login")}
+          onPress={() => navigation.navigate("signup")}
           style={{ textAlign: "center", color: COLORS.darkGray }}
         >
-          Already have an account?{" "}
-          <Text style={{ color: COLORS.secondary }}>Login here</Text>
+          Not registered?{" "}
+          <Text style={{ color: COLORS.secondary }}>Signup here</Text>
         </Text>
       </View>
     </View>
   );
 };
 
-export default SignUpScreen;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {

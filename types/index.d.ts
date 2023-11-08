@@ -7,6 +7,7 @@ export type StackParamList = {
   onboarding: undefined;
   welcome: undefined;
   signup: undefined;
+  login: undefined;
   securityPin: undefined;
   securityPinConfirm: undefined;
   verifyPhone: undefined;
