@@ -4,10 +4,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 
-// import { userSlice } from "../api/userSlice";
+import { userSlice } from "./userSlice";
 
 const reducers = combineReducers({
-  // user: userSlice.reducer,
+  user: userSlice.reducer,
 });
 
 const persistConfig = {

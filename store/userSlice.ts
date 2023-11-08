@@ -1,33 +1,68 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { BASEURL } from "../constants";
 
-// LOGIN - ACTIONS
-export const loginUser = createAsyncThunk(
-  "login",
+// SIGN-UP - ACTIONS
+export const signUpUser = createAsyncThunk(
+  "signup",
   async (
-    { estate_id, password }: { estate_id: string; password: string },
+    { email, password }: { email: string; password: string },
     thunkAPI
   ) => {
     try {
-      const response = await fetch(BASEURL + "/auth-login", {
+      const response = await fetch(BASEURL + "/api/register", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ estate_id, password }),
+        body: JSON.stringify({ email: email, password: password }),
       });
       let data = await response.json();
 
-      // console.log(data, "=========> DATA");
+      console.log([new Date()], data);
 
-      if (response.status === 401) {
+      if (response.status === 400) {
         return thunkAPI.rejectWithValue({ message: data?.error });
       } else if (response.status === 200) {
         return thunkAPI.fulfillWithValue({ ...data });
       } else {
         return thunkAPI.rejectWithValue({
-          message: "Estate ID and password doesn't match",
+          message: "Email and password doesn't match",
+        });
+      }
+    } catch (e) {
+      console.log("Error Login", e);
+      return thunkAPI.rejectWithValue({ message: "Server Error" });
+    }
+  }
+);
+// LOGIN - ACTIONS
+export const loginUser = createAsyncThunk(
+  "login",
+  async (
+    { email, password }: { email: string; password: string },
+    thunkAPI
+  ) => {
+    try {
+      const response = await fetch(BASEURL + "/api/login", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email, password: password }),
+      });
+      let data = await response.json();
+
+      // console.log([new Date()], data);
+
+      if (response.status === 400) {
+        return thunkAPI.rejectWithValue({ message: data?.error });
+      } else if (response.status === 200) {
+        return thunkAPI.fulfillWithValue({ ...data });
+      } else {
+        return thunkAPI.rejectWithValue({
+          message: "Email and password doesn't match",
         });
       }
     } catch (e) {
@@ -63,7 +98,16 @@ export const userSlice = createSlice({
       return state;
     },
 
-    logout: (state) => {},
+    logout: (state) => {
+      (state.isAuthenticated = false),
+        (state.userInfo = {
+          token: "",
+        }),
+        (state.isFetching = false),
+        (state.isSuccess = false),
+        (state.isError = false),
+        (state.message = "");
+    },
   },
   extraReducers: (builder) => {
     // ======== login
@@ -88,6 +132,31 @@ export const userSlice = createSlice({
     );
 
     builder.addCase(loginUser.pending, (state) => {
+      state.isFetching = true;
+    });
+
+    // ======== SignUp
+    builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+
+      state.isAuthenticated = true;
+      state.userInfo = payload;
+      return state;
+    });
+
+    builder.addCase(
+      signUpUser.rejected,
+      (state, { payload }: { payload: any }) => {
+        state.isFetching = false;
+        state.isError = true;
+
+        state.message = payload?.message;
+        return state;
+      }
+    );
+
+    builder.addCase(signUpUser.pending, (state) => {
       state.isFetching = true;
     });
   },

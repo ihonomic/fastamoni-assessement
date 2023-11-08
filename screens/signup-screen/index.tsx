@@ -1,19 +1,72 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import { TextInput } from "react-native-paper";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { COLORS, SIZES } from "../../theme";
 import { DefaultButton } from "../../components/Buttons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types";
 import { GiftIcon } from "../../assets/svgs/icons";
-import { Dropdown } from "react-native-element-dropdown";
-import { AntDesign } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { clearState, signUpUser, userSelector } from "../../store/userSlice";
+import Loader from "../../components/Loader";
 
 const SignUpScreen = () => {
   const navigation = useNavigation<StackNavigation>();
 
+  // GLOBAL STATE
+  const dispatch = useDispatch();
+  const { isAuthenticated, userInfo, isSuccess, isError, message } =
+    useSelector(userSelector);
+
+  // LOCAL STATE
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { email, password } = formData;
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(clearState());
+      navigation.navigate("verifyPhone");
+    }
+
+    if (isError) {
+      setLoading(false);
+      return Alert.alert("Info", message ? message : "No Network connection", [
+        {
+          text: "OK",
+          onPress: () => {
+            dispatch(clearState());
+          },
+        },
+      ]);
+    }
+  }, [isSuccess, isError]);
+
+  const onSubmit = () => {
+    if (email.length < 1 || password.length < 1) {
+      return Alert.alert("Info", "Email & password is required");
+    }
+    setLoading(true);
+    console.log(formData);
+    dispatch(signUpUser(formData));
+  };
+
+  //  CLEAR REDUX DATA ON EVERY APP REFRESH
+  useEffect(() => {
+    return () => {
+      dispatch(clearState());
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
+      {/* ADDITIONAL COMPONENT  */}
+      <Loader loading={loading} />
+
       <View>
         <Text style={styles.text}>We love to see you join us</Text>
       </View>
@@ -22,28 +75,36 @@ const SignUpScreen = () => {
 
       <View style={styles.inputContainer}>
         <TextInput
+          label="Email"
           style={[styles.input, { color: "red" }]}
-          placeholder="Enter full name"
+          placeholder="Email"
           placeholderTextColor={"#9F56D4"}
           right={<TextInput.Icon icon={() => <GiftIcon />} />}
+          value={email}
+          onChangeText={(text) => {
+            setFormData({ ...formData, email: text });
+          }}
         />
       </View>
       <View style={styles.inputContainer}>
         <TextInput
+          label="password"
+          secureTextEntry
           style={[styles.input, { color: "red" }]}
           placeholder="Enter Job Title"
           placeholderTextColor={"#9F56D4"}
           right={<TextInput.Icon icon={() => <GiftIcon />} />}
+          value={password}
+          onChangeText={(text) => {
+            setFormData({ ...formData, password: text });
+          }}
         />
       </View>
 
       {/* ------- */}
 
       <View style={styles.actionBtn}>
-        <DefaultButton
-          title="Proceed"
-          onPress={() => navigation.navigate("verifyPhone")}
-        />
+        <DefaultButton title="Proceed" onPress={onSubmit} />
         <Text
           onPress={() => navigation.navigate("login")}
           style={{ textAlign: "center", color: COLORS.darkGray }}
