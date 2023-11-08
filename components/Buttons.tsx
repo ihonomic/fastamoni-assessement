@@ -14,7 +14,7 @@ export const DefaultButton = ({
       onPress={onPress}
       style={[styles.btn, { backgroundColor: COLORS.primary }]}
     >
-      <Text style={{ fontWeight: "500", color: COLORS.white }}>{title}</Text>
+      <Text style={{ fontWeight: "400", color: COLORS.white }}>{title}</Text>
     </TouchableOpacity>
   );
 };
